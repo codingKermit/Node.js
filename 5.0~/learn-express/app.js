@@ -6,10 +6,20 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const fs = require('fs');
+const indexRouter = require('./routes');
+const userRouter = require('./routes/user');
+
 
 dotenv.config();
 const app = express();
 app.set('port',process.env.PORT||3000); // 환경변수가 없으면 3000번을 포트 번호로 사용
+
+app.use('/',indexRouter);
+app.use('/user',userRouter);
+
+app.use((req,res,next)=>{
+    res.status(404).send('Not Found');
+});
 
 try {
     fs.readdirSync('uploads');
