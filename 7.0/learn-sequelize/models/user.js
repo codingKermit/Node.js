@@ -35,6 +35,10 @@ class User extends Sequelize.Model{
             charset : 'utf8',
             collate: 'utf8_general_ci',
         });
+    };
+    static associate(db){
+        db.User.hasMany(db.Comment, {foreignKey : 'commenter',sourceKey : 'id'})
     }
-    static associate(db){}
 }
+
+module.exports = User;

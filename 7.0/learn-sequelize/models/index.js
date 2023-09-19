@@ -1,5 +1,7 @@
-// 시퀄라이즈 임포트
+// 시퀄라이즈, 모델 임포트
 const Sequelize = require('sequelize'); 
+const User = require('./user');
+const Comment = require('./comment');
 
 /* 
 현재 실행환경 설정. 여기서는 NODE_ENV에서 설정해 놓은 값을 따르지만
@@ -22,5 +24,17 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 // db = sequelize; 하지 않는 이유는 db에 다른 여러가지 속성이 부여될 수 있기 때문
 db.sequelize = sequelize;
+
+// 아래와 같은 모델들을 설정할 수 있기 때문에
+db.User = User;
+db.Comment = Comment;
+
+
+// 모델에서 생성한 initiate(), associate() 호출
+User.initiate(sequelize);
+Comment.initiate(sequelize);
+
+User.associate(db);
+Comment.associate(db);
 
 module.exports = db;
