@@ -1,11 +1,11 @@
 const express = require('express');
-const { Comment } = require('../models/comment');
+const { Comment } = require('../models');
 
 const router = express.Router();
 
 router.post('/', async (req,res,next)=>{
     try {
-        const comment = Comment.crreate({
+        const comment = Comment.create({
             commenter : req.body.id,
             comment : req.body.comment
         });

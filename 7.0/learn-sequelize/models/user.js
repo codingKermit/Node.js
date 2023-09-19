@@ -20,7 +20,7 @@ class User extends Sequelize.Model{
                 type : Sequelize.TEXT,
                 allowNull:true,
             },
-            create_at:{
+            created_at:{
                 type : Sequelize.DATE,
                 allowNull : false,
                 defaultValue : Sequelize.NOW,
