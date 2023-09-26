@@ -37,7 +37,7 @@ class User extends Sequelize.Model {
         });
     }
 
-    static associate(db){}
+    static associations(db){}
 }
 
 module.exports = User;
