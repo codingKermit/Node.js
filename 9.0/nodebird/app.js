@@ -5,16 +5,27 @@ const path = require('path');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotent = require('dotenv');
+const passport = require('passport');
 
 dotent.config();
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models');
+const passportConfig = require('./passport');
 
 const app = express();
+passportConfig(); // 패스포트 설정
 app.set('port',process.env.PORT||8001);
 app.set('view engine','html');
 nunjucks.configure('views',{
     express : app,
     watch : true,
+})
+sequelize.sync({ force : false })
+.then(()=>{
+    console.log('데이터베이스 연결 성공');
+})
+.catch((err)=>{
+    console.error(err);
 })
 
 app.use(morgan('dev'));
@@ -31,6 +42,10 @@ app.use(session({
         secure : false,
     }
 }));
+
+// passport 모듈 내부적으로 initialize, session이 존재한다
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/',pageRouter);
 
