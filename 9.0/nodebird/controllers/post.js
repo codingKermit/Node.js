@@ -7,10 +7,10 @@ exports.afterUploadImage = (req,res) =>{
 
 exports.uploadPost = async (req,res,next) => {
  try {
-    const post = await Post.creeat({
+    const post = await Post.create({
         content : req.body.content,
         img : req.body.url,
-        UserId : req.body.id,
+        UserId : req.user.id,
     });
     const hashtags = req.body.content.match(/#[^\s#]*/g);
     if(hashtags){
@@ -24,7 +24,7 @@ exports.uploadPost = async (req,res,next) => {
         );
         // hashtag 모델에서 사용자가 따로 넘겨줘야 하는 값은 title 뿐이므로 하나만 넘겨주어야 한다.
         // result에는 [모델, 생성 여부]가 반환되어 있으므로 map을 통해 Hashtag 모델만 사용한다
-        await Post.addHashtags(result.map(r=>r[0]));
+        await post.addHashtags(result.map(r=>r[0]));
     }
     res.redirect('/')
  } catch (error) {

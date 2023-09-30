@@ -20,7 +20,19 @@ module.exports = () =>{
     serializeUser의 done에서 사용된 두번째 데이터가 여기서 인자로 사용
     */
     passport.deserializeUser((id,done)=>{
-        User.findOne({where:{id}})
+        User.findOne({
+            where:{id},
+            // 관계 메서드를 통해 관계 되어있는 팔로잉, 팔로워 데이터까지 조회해온다
+            include : [{
+                model : User,
+                attributes : ['id','nick'], // User의 비밀번호까지 조회되지 않기 하기 위해서 컬럼명을 확실히 명시
+                as : 'Followers',
+            }, {
+                model : User,
+                attributes : ['id','nick'],
+                as : 'Followings'
+            }]
+        })
         .then(user=>done(null,user)) // 에러 발생시 => null, 정상 동작시 req.user에 정보 저장
         .catch(err => done(err));
     });
