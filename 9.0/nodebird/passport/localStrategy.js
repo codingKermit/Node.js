@@ -19,7 +19,7 @@ module.exports = () =>{
     // 실질적으로 passport-local의 로그인 전략을 수립하는 단계의 시작
     async (email, password, done)=>{
         try {
-            const exUser = User.findOne({where : email});
+            const exUser = await User.findOne({where : email});
             if(exUser){
                 const result = await bcrypt.compare(password, exUser.password);
                 if(result){

@@ -1,6 +1,6 @@
 const passport = require('passport');
-const local = require('passport-local');
-const kakao = require('passport-kakao');
+const local = require('./localStrategy');
+const kakao = require('./kakaoStrategy');
 const User = require('../models/user');
 
 module.exports = () =>{
@@ -20,7 +20,7 @@ module.exports = () =>{
     serializeUser의 done에서 사용된 두번째 데이터가 여기서 인자로 사용
     */
     passport.deserializeUser((id,done)=>{
-        user.findOne({where:{id}})
+        User.findOne({where:{id}})
         .then(user=>done(null,user)) // 에러 발생시 => null, 정상 동작시 req.user에 정보 저장
         .catch(err => done(err));
     });
