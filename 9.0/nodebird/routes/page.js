@@ -1,6 +1,6 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('../middlewares');
-const { renderProfile, renderJoin, renderMain, renderHashtag, renderUpdate } = require('../controllers/page');
+const { renderProfile, renderJoin, renderMain, renderHashtag, renderUpdate, renderWriter } = require('../controllers/page');
 
 const router = express.Router();
 
@@ -17,8 +17,9 @@ router.use((req,res,next)=>{
 // 하지만 false일 경우 next()는 동작하지 않고 '로그인 필요' 라는 문구가 나온다
 router.get('/profile', isLoggedIn, renderProfile); 
 router.get('/join', isNotLoggedIn, renderJoin);
-router.get('/',renderMain);
-router.get('/hashtag',renderHashtag);
 router.get('/update',isLoggedIn, renderUpdate);
+router.get('/hashtag',renderHashtag);
+router.get('/writer',renderWriter);
+router.get('/',renderMain);
 
 module.exports = router;

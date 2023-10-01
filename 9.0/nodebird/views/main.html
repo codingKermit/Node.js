@@ -169,13 +169,7 @@
     document.querySelectorAll('.twit-author').forEach(function(tag) {
       tag.addEventListener('click', function() {
         const twitUserId = tag.parentNode.querySelector('.twit-user-id').value;
-        axios.post(`/post/${twitUserId}`)
-          .then(() => {
-            location.reload();
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+        window.location.href=`/writer?writerId=${twitUserId}`
       });
     });
 
