@@ -1,7 +1,8 @@
 const passport = require('passport');
 const local = require('./localStrategy');
 const kakao = require('./kakaoStrategy');
-const User = require('../models/user');
+const { User, Post } = require('../models');
+
 
 module.exports = () =>{
     /* 
@@ -31,6 +32,10 @@ module.exports = () =>{
                 model : User,
                 attributes : ['id','nick'],
                 as : 'Followings'
+            },{
+                model : Post,
+                attributes : ['id'],
+                as : 'Likes'
             }]
         })
         .then(user=>done(null,user)) // 에러 발생시 => null, 정상 동작시 req.user에 정보 저장

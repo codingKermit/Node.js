@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { afterUploadImage, uploadPost } = require('../controllers/post');
+const { afterUploadImage, uploadPost, like, unlike, remove, filter } = require('../controllers/post');
 const { isLoggedIn } = require('../middlewares');
 
 const router = express.Router();
@@ -35,6 +35,20 @@ const upload = multer({
 
 // POST /post/img
 router.post('/img',isLoggedIn,upload.single('img'),afterUploadImage);
+
+
+// POST /post/:id/like
+router.post('/:id/like',isLoggedIn,like);
+
+// POST /post/:id/unlike
+router.post('/:id/unlike',isLoggedIn,unlike);
+
+// POST /post/:id/remove
+router.post('/:id/remove',isLoggedIn,remove);
+
+// POST /post/:id
+router.post('/:id',filter);
+
 
 // POST /post
 const upload2 = multer();

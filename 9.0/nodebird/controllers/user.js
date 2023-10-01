@@ -19,8 +19,6 @@ exports.unfollow = async (req,res,next)=>{
     try {
         const user = await User.findOne({where : {id : req.user.id}});
         const unfollow = await User.findOne({where : {id : req.params.id}});
-        console.log('user : ' , user);
-        console.log('unfollow : ' , unfollow);
         if(user && unfollow){
             await user.removeFollowing(unfollow);
             res.send('success')

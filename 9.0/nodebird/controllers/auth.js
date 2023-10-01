@@ -50,8 +50,6 @@ exports.logout = (req,res) => {
 exports.update = async (req,res,next) => {
     try {
         const { nick, password, passwordChk} = req.body;
-        console.log('nick',nick)
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         const id = req.user.id;
         if(password != passwordChk){
             return res.redirect('/update?error=password check fail');

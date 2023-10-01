@@ -29,6 +29,7 @@ exports.renderMain = async (req,res,next) =>{
 
 exports.renderHashtag = async (req,res, next) => {
     const query = req.query.hashtag;
+    const writer = req.query.writer;
     if(!query){
         return res.redirect('/');
     } else {

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="timeline">
+<div class="timeline">
       {% if user %}
         <div>
           <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
@@ -19,23 +19,31 @@
             </div>
           </form>
         </div>
-      {% endif %}
-      <div class="twits">
+        {% endif %}
+        <div class="twits">
         <form id="hashtag-form" action="/hashtag">
           <input type="text" name="hashtag" placeholder="태그 검색">
           <button class="btn">검색</button>
         </form>
         {% for twit in twits %}
           <div class="twit">
+            {% if twit.User.id === user.id %}
+            <button class="twit-delete">삭제</button>
+            {% endif %}
             <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
             <input type="hidden" value="{{twit.id}}" class="twit-id">
-            <div class="twit-author">{{twit.User.nick}}</div>
             {% if not followingIdList.includes(twit.User.id) and twit.User.id !== user.id and user.id !== undefined %}
               <button class="twit-follow">팔로우하기</button>
             {% elif twit.User.id !== user.id and user.id !== undefined %}
               <button class="twit-unfollow">팔로우끊기</button>
             {% endif %}
+            <div class="twit-author">{{twit.User.nick}}</div>
             <div class="twit-content">{{twit.content}}</div>
+            {% if not likeIdList.includes(twit.id) and user.id !== undefined %}
+              <button class="twit-like">좋아요</button>
+            {% elif user.id !== undefined %}
+              <button class="twit-unlike">좋아요 취소</button>
+            {% endif %}
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
@@ -102,5 +110,74 @@
         }
       });
     });
+
+    document.querySelectorAll('.twit-like').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const postId = tag.parentNode.querySelector('.twit-id').value;
+          if (confirm('좋아요 하시겠습니까?')) {
+            axios.post(`/post/${postId}/like`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      });
+    });
+
+
+    document.querySelectorAll('.twit-unlike').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const postId = tag.parentNode.querySelector('.twit-id').value;
+          if (confirm('좋아요 취소 하시겠습니까?')) {
+            axios.post(`/post/${postId}/unlike`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.twit-delete').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const postId = tag.parentNode.querySelector('.twit-id').value;
+          if (confirm('삭제 하시겠습니까?')) {
+            axios.post(`/post/${postId}/remove`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.twit-author').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const twitUserId = tag.parentNode.querySelector('.twit-user-id').value;
+        axios.post(`/post/${twitUserId}`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      });
+    });
+
   </script>
 {% endblock %}

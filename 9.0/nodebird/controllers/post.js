@@ -1,4 +1,4 @@
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, User } = require('../models');
 
 exports.afterUploadImage = (req,res) =>{
     console.log(req.file);
@@ -32,3 +32,76 @@ exports.uploadPost = async (req,res,next) => {
     next(error);
  }   
 };
+
+exports.like = async (req,res,next) =>{
+    try {
+        const user = await User.findOne({where : {id : req.user.id}});
+        const post = await Post.findOne({where : {id : req.params.id}});
+
+        if(user && post){
+            await user.addLike(post);
+            res.send('success')
+        } else {
+            res.status(404).sned('no id error')
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
+exports.unlike = async (req,res,next) =>{
+    try {
+        const user = await User.findOne({where : {id : req.user.id}});
+        const post = await Post.findOne({where : {id : req.params.id}});
+        if(user && post){
+            await user.removeLike(post);
+            res.send('success')
+        } else {
+            res.status(404).sned('no id error')
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
+exports.remove = async (req,res,next) =>{
+    try {
+        const user = await User.findOne({where : {id : req.user.id}});
+        const post = await Post.findOne({where : {id : req.params.id}});
+        if(user && post){
+            await post.destroy({where : {id : req.params.id}});
+            res.send('success');
+        } else {
+            res.status(404).send('no id error');
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
+exports.filter = async (req,res,next) =>{
+    try {
+        const userId = req.params.id;
+        if(!userId){
+            return res.redirect('/');
+        } else {
+            const user = await User.findOne({where : {id:userId}});
+            if(user){
+                let posts = []; 
+                posts = await user.getPosts();
+                return res.render('main',{
+                    title : `${userId} | NordBird`,
+                    twits : posts,
+                });
+            } else {
+                res.status(404).send('not exist user');
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
+}
