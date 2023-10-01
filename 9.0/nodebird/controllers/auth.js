@@ -7,7 +7,7 @@ exports.join = async (req,res,next) => {
     try {
         const exUser = await User.findOne({where:{email}});
         if(exUser){
-            return res.redirect('./join?error=exist');
+            return res.redirect('/join?error=exist');
         }
         const hash = await bcrypt.hash(password,12);
         await User.create({
@@ -46,3 +46,31 @@ exports.logout = (req,res) => {
         res.redirect('/');
     });
 };
+
+exports.update = async (req,res,next) => {
+    try {
+        const { nick, password, passwordChk} = req.body;
+        console.log('nick',nick)
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        const id = req.user.id;
+        if(password != passwordChk){
+            return res.redirect('/update?error=password check fail');
+        }
+        const nickname = await User.findOne({where : {nick}});
+        if(nickname){
+            return res.redirect('/update?error=duplicated nick');
+        } 
+        const user = await User.findOne({where : {id}});
+        if(nick){
+            user.update({'nick':nick},{where : {id}});
+        };
+        if(password){
+            const hash = await bcrypt.hash(password,12);
+            user.update({'password':hash},{where:{id}});
+        }
+        return res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
+}

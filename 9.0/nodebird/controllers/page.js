@@ -48,3 +48,7 @@ exports.renderHashtag = async (req,res, next) => {
         }
     } 
 }
+
+exports.renderUpdate = async (req,res,next)=>{
+    res.render('update', {title : '회원 수정 - NodeBird'})
+}
