@@ -39,7 +39,6 @@ exports.renderHashtag = async (req,res, next) => {
             if(hashtag){
                 posts = await hashtag.getPosts({include:[{model:User}]});
             }
-            console.log('posts',posts)
             return res.render('main',{
                 title:`${query} | NordBird`,
                 twits : posts,
@@ -66,7 +65,6 @@ exports.renderWriter = async (req,res,next)=>{
             if(user){
                 posts = await user.getPosts({include:[{model:User}]});
             }
-            console.log('posts',posts)
             return res.render('main',{
                 title: `${writerId} | NordBird`,
                 twits : posts,
