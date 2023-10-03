@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const User = require('../models/user');
+const cashModule = require('../passport/index');
 
 exports.join = async (req,res,next) => {
     const { email, nick, password } = req.body;
@@ -42,6 +43,14 @@ exports.login = (req,res,next) => {
 };
 
 exports.logout = (req,res) => {
+
+    const id = req.user.id;
+    
+    const cash = cashModule.getCash();
+    if(cash){
+        cashModule.removeCash(id);
+    }
+
     req.logout(()=>{
         res.redirect('/');
     });
