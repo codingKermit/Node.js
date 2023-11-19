@@ -3,7 +3,7 @@ const cors = require('cors');
 
 
 const { verifyToken, apiLimiter, corsWhenDomainMatches } = require('../middlewares');
-const { createToken, tokenTest, getMyPosts, getPostsByHashtag } = require('../controllers/v2')
+const { createToken, tokenTest, getMyPosts, getPostsByHashtag, getFollowerList, getFollowingList} = require('../controllers/v2')
 
 const router = express.Router();
 
@@ -26,9 +26,9 @@ router.get('/posts/my', apiLimiter, verifyToken, getMyPosts);
 router.get('/posts/hashtag/:title', apiLimiter, verifyToken, getPostsByHashtag);
 
 // GET /v2/followerList
-router.get('/followerList',apiLimiter,verifyToken)
+router.get('/followerList',apiLimiter,verifyToken, getFollowerList)
 
 // GET /v2/followingList
-router.get('/followingList',apiLimiter,verifyToken)
+router.get('/followingList',apiLimiter,verifyToken, getFollowingList)
 
 module.exports = router;

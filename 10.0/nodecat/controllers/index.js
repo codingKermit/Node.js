@@ -45,6 +45,26 @@ exports.searchByHashtag = async (req,res,next) => {
     }
 }
 
+exports.getMyFollwerList = async (req,res,next) => {
+    try {
+        const result = await request(req,'/followerList');
+        res.json(result.data);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
+exports.getMyFollowingList = async (req,res,next) => {
+    try {
+        const result = await request(req,'/followingList');
+        res.json(result.data);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
 exports.renderMain = (req,res) => {
     res.render('main', { key : process.env.CLIENT_SECRET});
 };

@@ -83,3 +83,39 @@ exports.getPostsByHashtag = async (req,res) =>{
         });
     };
 };
+
+exports.getFollowerList = async (req,res) =>{
+    try {
+        const user = await User.findOne({where : {id : res.locals.decoded.id}});
+        const followers = await user.getFollowers();
+        console.log(user)
+        res.json({
+            code : 200,
+            payload : followers
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            code : 500,
+            message : '서버 에러'
+        })
+
+    }
+}
+
+exports.getFollowingList = async (req,res) => {
+    try {
+        const user = await User.findOne({where : {id : res.locals.decoded.id}});
+        const followings = await user.getFollowings();
+        res.json({
+            code : 200,
+            payload : followings
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            code : 500,
+            message : '서버 에러'
+        })
+    }
+}
