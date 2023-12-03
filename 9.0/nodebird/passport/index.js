@@ -43,11 +43,14 @@ module.exports = () =>{
        
        const cash = cashing[id]||{};
        
+       /**
+        * 매번 DB를 조회하지 않도록 캐싱한다는 것은 즉, DB에 변경사항이 생겨도 캐싱값을 주겠다는 의미인데, 그게 과연 옳은 것일까..?
+        */
        
        // 쿠키가 존재 하고, 만료시간이 지나지 않은 경우
-       if(cash && cash.expire > Date.now()){
-           done(null,cash);
-        } else {
+    //    if(cash && cash.expire > Date.now()){
+    //        done(null,cash);
+    //     } else {
             // 캐시가 존재하지 않거나, 만료시간이 지난경우 새로운 쿠키 제공 및 캐싱
             User.findOne({
                 where:{id},
@@ -84,7 +87,7 @@ module.exports = () =>{
                 
             }) // 에러 발생시 => null, 정상 동작시 req.user에 정보 저장
             .catch(err => done(err));
-        }
+        // }
     });
     
     local();

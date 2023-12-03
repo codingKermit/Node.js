@@ -11,16 +11,18 @@ exports.createToken = async (req,res) => {
                 attribute : ['nick','id'],
             },
         });
+
         if(!domain){
             return res.status(401).json({
                 code : 401,
                 message : '등록되지 않은 도메인입니다. 먼저 도메인을 등록하세요',
             });
         }
-        
+        // res.locals.domain = domain;
         const token = jwt.sign({
             id : domain.User.id,
             nick : domain.User.nick,
+            type : domain.type,
         },process.env.JWT_SECRET,{
             expiresIn : '30m', // 30분
             issuer : 'nodebird'

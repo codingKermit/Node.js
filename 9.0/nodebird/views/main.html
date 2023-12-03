@@ -79,7 +79,7 @@
           if (userId !== myId.value) {
             if (confirm('팔로잉하시겠습니까?')) {
               axios.post(`/user/${userId}/follow`)
-                .then(() => {
+                .then((result) => {
                   location.reload();
                 })
                 .catch((err) => {
