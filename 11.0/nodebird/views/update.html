@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="timeline">
+    <form id="update-form" action="/auth/update" method="post">
+      <div class="input-group">
+        <label for="update-nick">닉네임</label>
+        <input id="update-nick" type="text" name="nick"></div>
+      <div class="input-group">
+        <label for="update-password">비밀번호</label>
+        <input id="update-password" type="password" name="password">
+      </div>
+      <div class="input-group">
+        <label for="update-password-check">비밀번호 확인</label>
+        <input id="update-password-check" type="password" name="passwordChk">
+      </div>
+      <button id="update-btn" type="submit" class="btn">회원수정</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    window.onload = () => {
+        const error = new URL(location.href).searchParams.get('error');
+        switch (error) {
+            case "duplicated nick":
+                alert('이미 존재하는 닉네임입니다.');
+                break;
+            case "password check fail" : 
+                alert("비밀번호 확인이 일치하지 않습니다");
+                break;
+        }
+    };
+  </script>
+{% endblock %}
