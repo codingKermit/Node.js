@@ -19,6 +19,6 @@ describe('User 모델',()=>{
         };
         User.associate(db);
         expect(db.User.hasMany).toHaveBeenCalledWith(db.Post);
-        expect(db.User.belongsToMany).toHaveBeenCalledTimes(2);
+        expect(db.User.belongsToMany).toHaveBeenCalledTimes(3);
     });
 });
